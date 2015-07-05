@@ -2,22 +2,20 @@
 <!-- ====================================================================== 
      2010-10-22 下午16:01:22                                                        
 
-     IdeaConfig    
-     IdeaConfig是一个公共库，封装了一些读取properties配置文件的通用方法
+     IDEADP-CORE    
                    
      Chinakite Zhang                                                                
      ====================================================================== -->
-<project name="IdeaConfig" default="default" basedir="./">
+<project name="IdeaConfigDeployer" default="default" basedir="./">
     <description>
-    	IdeaConfig是一个公共库，封装了一些读取properties配置文件的通用方法
+        User Center of 6wanr.com .
     </description>
 
     <!-- set global properties for this build -->
     <property name="src" location="src"/>
-    <property name="test-src" location="test"/>
     <property name="bin" location="bin"/>
     <property name="lib" location="lib"/>
-    <property name="test-report" location="report/test"/>
+    <property name="dist" location="dist"/>
     
     <!-- set compile classpath -->
     <path id="compile.classpath">
@@ -28,31 +26,38 @@
     
     <target name="init">
         <mkdir dir="${bin}"/>
-        <mkdir dir="${test-report}"/>
     </target>
     
     <!-- ================================= 
           target: default              
          ================================= -->
-    <target name="default" depends="jar" description="IdeaJDBC is a SQL Mapping framework.">
+    <target name="default" depends="deploy" description="6Wanr UserCenter.">
     </target>
     
     <!-- - - - - - - - - - - - - - - - - - 
           target: jar                      
          - - - - - - - - - - - - - - - - - -->
+    <target name="deploy" depends="jar">
+        <copy todir="../wanr-usercenter/WebRoot/WEB-INF/lib">
+            <fileset dir="${dist}">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+    </target>
+    
     <target name="jar">
-        <jar destfile="dist/ideaconfig-0.1.jar" > 
+        <jar destfile="${dist}/ideajdbc-0.1.jar" > 
             <fileset dir="./bin">
                 <exclude name="**/Test*.class"/>
-                <exclude name="**/*.properties"/>
+                <exclude name="**/ideajdbc.properties"/>
             </fileset>
         </jar>
     </target>
-    
+
     <target name="compile">
         <javac srcdir="${src}" destdir="${bin}" encoding="UTF-8" classpathref="compile.classpath">
             <compilerarg value="-Xlint:unchecked"/>
         </javac>
     </target>
-   
+    
 </project>

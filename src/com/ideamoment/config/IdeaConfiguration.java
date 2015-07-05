@@ -13,10 +13,10 @@ import java.util.Set;
  *
  */
 public class IdeaConfiguration {
-    private static PropertyMap globalMap;
-    public static boolean inited = false;
+    private PropertyMap globalMap;
+    private boolean inited = false;
     
-    protected static void initPropertyMap(String configPath) {
+    protected void initPropertyMap(String configPath) {
         String fileName = configPath;
         
         globalMap = PropertyMapLoader.load(null, fileName);
@@ -33,7 +33,7 @@ public class IdeaConfiguration {
      * 
      * @param configPath
      */
-    public static synchronized void initConfig(String configPath) {
+    public synchronized void initConfig(String configPath) {
         if(!inited) {
             initPropertyMap(configPath);
         }
@@ -42,7 +42,7 @@ public class IdeaConfiguration {
     /**
      * Return the property map loading it if required.
      */
-    public static synchronized PropertyMap getPropertyMap() {
+    public synchronized PropertyMap getPropertyMap() {
         if (globalMap == null){
             initPropertyMap("ideaconfig.properties");
         }
@@ -52,7 +52,7 @@ public class IdeaConfiguration {
     /**
      * Return the property map loading it if required.
      */
-    public static synchronized PropertyMap getPropertyMap(String configPath) {
+    public synchronized PropertyMap getPropertyMap(String configPath) {
         if (globalMap == null){
             initPropertyMap(configPath);
         }
@@ -62,42 +62,42 @@ public class IdeaConfiguration {
     /**
      * Return a String property with a default value.
      */
-    public static synchronized String get(String key, String defaultValue) {
+    public synchronized String get(String key, String defaultValue) {
         return getPropertyMap().get(key, defaultValue);
     }
     
     /**
      * Return a int property with a default value.
      */
-    public static synchronized int getInt(String key, int defaultValue) {
+    public synchronized int getInt(String key, int defaultValue) {
         return getPropertyMap().getInt(key, defaultValue);
     }
     
     /**
      * Return a long property with a default value.
      */
-    public static synchronized long getLong(String key, long defaultValue) {
+    public synchronized long getLong(String key, long defaultValue) {
         return getPropertyMap().getLong(key, defaultValue);
     }
     
     /**
      * Return a boolean property with a default value.
      */
-    public static synchronized boolean getBoolean(String key, boolean defaultValue) {
+    public synchronized boolean getBoolean(String key, boolean defaultValue) {
         return getPropertyMap().getBoolean(key, defaultValue);
     }
     
     /**
      * Set a property return the previous value.
      */
-    public static synchronized String put(String key, String value) {
+    public synchronized String put(String key, String value) {
         return getPropertyMap().put(key, value);
     }
 
     /**
      * Set a Map of key value properties.
      */
-    public static synchronized void putAll(Map<String,String> keyValueMap) {
+    public synchronized void putAll(Map<String,String> keyValueMap) {
         getPropertyMap().putAll(keyValueMap);
     }
     
@@ -107,7 +107,7 @@ public class IdeaConfiguration {
      * @param keyPattern key的匹配串，目前只支持以XXX开头的模式，即传入参数为datasource.*
      * @return
      */
-    public static synchronized List<String[]> getConfigurationItems(String keyPattern) {
+    public synchronized List<String[]> getConfigurationItems(String keyPattern) {
         List<String[]> result = new ArrayList<String[]>();
         Set<String> keys = getPropertyMap().keySet();
         if(keyPattern.trim().equals("*")) {
@@ -137,5 +137,12 @@ public class IdeaConfiguration {
             }
         }
         return result;
+    }
+    
+    /**
+     * @return the inited
+     */
+    public boolean isInited() {
+        return inited;
     }
 }
